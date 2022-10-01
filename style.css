@@ -37,7 +37,7 @@ header {
     grid-template-rows: repeat(3, 1fr);
 }
 
-button {
+.controls button {
     padding: 10px 16px;
     font-size: 1.2rem;
 }
@@ -78,4 +78,29 @@ button {
 
 .restart-button {
     margin-right: 8px;
+}
+
+#select-difficulty-modal {
+    border: 1px solid black;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    border-radius: 25px;
+}
+
+#select-difficulty-form {
+    width: 200px;
+    height: 200px;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background-color: #e2e8f0;
+}
+
+button[type="submit"] {
+    padding: 6px 10px;
+    margin-top: 20px;
 }

@@ -34,9 +34,21 @@
     </div>
 
     <div class="controls">
-        <button class="restart-button">Restart</button>
-        <button><i class="bi bi-gear-fill"></i>Settings</button>
+        <button class="restart-button"><i class="bi bi-arrow-repeat"></i>Restart</button>
+        <button class="settings-button"><i class="bi bi-gear-fill"></i>Settings</button>
     </div>
+
+    <dialog id="select-difficulty-modal">
+        <form method="dialog" id="select-difficulty-form">
+            <label for="difficulty">Select difficulty</label>
+            <select name="difficulty" id="difficulty">
+                <option value="0">Easy</option>
+                <option value="1">Unbeatable</option>
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+    </dialog>
 </div>
 
 </body>
