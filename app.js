@@ -1,5 +1,7 @@
 //handle modal logic
 const settingsModal = document.querySelector('#settings-modal');
+const resultsModal = document.querySelector('#results-modal');
+const resultsModalButton = document.querySelector('#results-button');
 
 function openSettings() {
     settingsModal.showModal();
@@ -10,6 +12,16 @@ settingsModal.addEventListener('click', (e) => {
         settingsModal.close();
     }
 });
+
+resultsModal.addEventListener('click', (e) => {
+    if (e.target === resultsModal) {
+        resultsModal.close();
+    }
+});
+
+resultsModalButton.onclick = () => {
+    resultsModal.close();
+}
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -45,8 +57,16 @@ const GameBoard = (() => {
             gameEnded = true;
 
             //open result dialog
-            console.log('gameover');
-            
+            if (gameOver()) {
+                if (!currentPlayerTurn) {
+                    DisplayController.showResult('You Win!');
+                } else {
+                    DisplayController.showResult('Computer Wins');
+                }
+            } else {
+                DisplayController.showResult('Draw! Game Tied');
+            }
+
             return;
         }
 
@@ -163,6 +183,7 @@ const GameBoard = (() => {
 const DisplayController = (() => {
     const cells = document.querySelectorAll('.cell');
     const players = document.querySelectorAll('.turn-indicator i');
+    const resultsMessage = document.querySelector('#results-message');
 
     cells.forEach(cell => cell.addEventListener('click', e => {
         if (GameBoard.getCurrentPlayerTurn() || GameBoard.getGameStatus()) return;
@@ -179,9 +200,15 @@ const DisplayController = (() => {
         players.forEach(player => player.classList.toggle('current-turn'));
     }
 
+    function showResult(result) {
+        resultsMessage.innerText = result;
+        resultsModal.showModal();
+    }
+
     return {
         set,
         changeTurn,
+        showResult,
     };
 })();
 
