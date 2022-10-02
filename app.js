@@ -18,7 +18,7 @@ function getRandomInt(min, max) {
 }
 
 function changeDifficulty() {
-    const form = document.querySelector('.select-difficulty-form');
+    const form = document.querySelector('#select-difficulty-form');
     const newDifficulty = Number(form.difficulty.value);
 
     ComputerPlayer.setDifficulty(newDifficulty);
@@ -31,6 +31,7 @@ const GameBoard = (() => {
     const gameBoard = ['', '', '', '', '', '', '', '', ''];
     let currentPlayerTurn = false; //false = player, true = CPU
     let computerPlayerTimer;
+    let gameEnded = false;
 
     function makeMove(index) {
         if (gameBoard[index] != '') return;
@@ -40,8 +41,13 @@ const GameBoard = (() => {
 
         DisplayController.set(index, mark);
 
-        if (gameOver()) { //checks for win/draw/loss
+        if (gameOver() || gameTied()) {
+            gameEnded = true;
+
+            //open result dialog
+            console.log('gameover');
             
+            return;
         }
 
         DisplayController.changeTurn();
@@ -53,7 +59,65 @@ const GameBoard = (() => {
     }
 
     function gameOver() {
+        //check rows
+        for (let i = 0; i < 3; i++) {
+            let x = 0;
+            let o = 0;
+
+            for (let j = 0; j < 3; j++) {
+                if (gameBoard[3 * i + j] === 'X') {
+                    x++;
+                } else if (gameBoard[3 * i + j] === 'O') {
+                    o++;
+                }
+            }
+
+            if (x === 3 || o === 3) {
+                return true;
+            }
+        }
+
+        //check columns
+        for (let i = 0; i < 3; i++) {
+            let x = 0;
+            let o = 0;
+
+            for (let j = 0; j < 3; j++) {
+                if (gameBoard[i + 3 * j] === 'X') {
+                    x++;
+                } else if (gameBoard[i + 3 * j] === 'O') {
+                    o++;
+                }
+            }
+
+            if (x === 3 || o === 3) {
+                return true;
+            }
+        }
+
+        //check diagonals
+        if (gameBoard[0] === 'X' && gameBoard[4] === 'X' && gameBoard[8] === 'X') {
+            return true;
+        }
+
+        if (gameBoard[6] === 'X' && gameBoard[4] === 'X' && gameBoard[2] === 'X') {
+            return true;
+        }
+
+        if (gameBoard[0] === 'O' && gameBoard[4] === 'O' && gameBoard[8] === 'O') {
+            return true;
+        }
+
+        if (gameBoard[6] === 'O' && gameBoard[4] === 'O' && gameBoard[2] === 'O') {
+            return true;
+        }
+
         return false;
+    }
+
+    function gameTied() {
+        const emptyCell = gameBoard.indexOf('');
+        return emptyCell === -1;
     }
 
     function getCurrentPlayerTurn() {
@@ -77,6 +141,12 @@ const GameBoard = (() => {
             currentPlayerTurn = false;
             DisplayController.changeTurn();
         }
+
+        gameEnded = false;
+    }
+
+    function getGameStatus() {
+        return gameEnded;
     }
 
     return {
@@ -84,6 +154,7 @@ const GameBoard = (() => {
         getCurrentPlayerTurn,
         getGameBoard,
         resetGame,
+        getGameStatus,
     };
 })();
 
@@ -94,7 +165,7 @@ const DisplayController = (() => {
     const players = document.querySelectorAll('.turn-indicator i');
 
     cells.forEach(cell => cell.addEventListener('click', e => {
-        if (GameBoard.getCurrentPlayerTurn()) return;
+        if (GameBoard.getCurrentPlayerTurn() || GameBoard.getGameStatus()) return;
 
         const index = e.target.dataset.index;
         GameBoard.makeMove(index);
@@ -117,8 +188,8 @@ const DisplayController = (() => {
 
 //module for cpu opponent logic
 const ComputerPlayer = (() => {
-    const difficulty = 0;
-
+    let difficulty = 0;
+    
     function makeMove() {
         const move = difficulty === 0 ? getRandomMove() : getBestMove();
         GameBoard.makeMove(move);
@@ -139,6 +210,10 @@ const ComputerPlayer = (() => {
 
     function setDifficulty(newDifficulty) {
         difficulty = newDifficulty;
+    }
+
+    function getBestMove() {
+
     }
 
     return {
