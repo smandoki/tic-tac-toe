@@ -17,6 +17,14 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function changeDifficulty() {
+    const form = document.querySelector('.select-difficulty-form');
+    const newDifficulty = Number(form.difficulty.value);
+
+    ComputerPlayer.setDifficulty(newDifficulty);
+    GameBoard.resetGame();
+}
+
 
 //module for storing board state and game logic
 const GameBoard = (() => {
@@ -33,7 +41,7 @@ const GameBoard = (() => {
         DisplayController.set(index, mark);
 
         if (gameOver()) { //checks for win/draw/loss
-            //handle game end
+            
         }
 
         DisplayController.changeTurn();
@@ -53,8 +61,7 @@ const GameBoard = (() => {
     }
 
     function getGameBoard() {
-        //returning shallow copy so that board cannot 
-        //be modified from outside
+        //returning shallow copy so that board cannot be modified from outside
         return [...gameBoard];
     }
 
@@ -62,7 +69,13 @@ const GameBoard = (() => {
         for (let i = 0; i < gameBoard.length; i++) {
             gameBoard[i] = '';
             DisplayController.set(i, '');
-            clearTimeout(computerPlayerTimer);
+        }
+
+        clearTimeout(computerPlayerTimer);
+        
+        if (currentPlayerTurn) {
+            currentPlayerTurn = false;
+            DisplayController.changeTurn();
         }
     }
 
@@ -124,7 +137,12 @@ const ComputerPlayer = (() => {
         return possibleMoves[getRandomInt(0, possibleMoves.length - 1)];
     }
 
+    function setDifficulty(newDifficulty) {
+        difficulty = newDifficulty;
+    }
+
     return {
         makeMove,
+        setDifficulty,
     };
 })();
