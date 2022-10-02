@@ -11,10 +11,6 @@ settingsModal.addEventListener('click', (e) => {
     }
 });
 
-function resetGame() {
-
-}
-
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -26,6 +22,7 @@ function getRandomInt(min, max) {
 const GameBoard = (() => {
     const gameBoard = ['', '', '', '', '', '', '', '', ''];
     let currentPlayerTurn = false; //false = player, true = CPU
+    let computerPlayerTimer;
 
     function makeMove(index) {
         if (gameBoard[index] != '') return;
@@ -34,16 +31,16 @@ const GameBoard = (() => {
         gameBoard[index] = mark;
 
         DisplayController.set(index, mark);
-        DisplayController.changeTurn();
-
-        currentPlayerTurn = !currentPlayerTurn;
 
         if (gameOver()) { //checks for win/draw/loss
             //handle game end
         }
 
+        DisplayController.changeTurn();
+        currentPlayerTurn = !currentPlayerTurn;
+
         if (currentPlayerTurn) {
-            ComputerPlayer.makeMove();
+            computerPlayerTimer = setTimeout(ComputerPlayer.makeMove, 800);
         }
     }
 
@@ -61,10 +58,19 @@ const GameBoard = (() => {
         return [...gameBoard];
     }
 
+    function resetGame() {
+        for (let i = 0; i < gameBoard.length; i++) {
+            gameBoard[i] = '';
+            DisplayController.set(i, '');
+            clearTimeout(computerPlayerTimer);
+        }
+    }
+
     return {
         makeMove,
         getCurrentPlayerTurn,
         getGameBoard,
+        resetGame,
     };
 })();
 
