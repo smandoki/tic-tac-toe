@@ -1,17 +1,6 @@
 //handle modal logic
-const settingsModal = document.querySelector('#settings-modal');
 const resultsModal = document.querySelector('#results-modal');
 const resultsModalButton = document.querySelector('#results-button');
-
-function openSettings() {
-    settingsModal.showModal();
-}
-
-settingsModal.addEventListener('click', (e) => {
-    if (e.target === settingsModal) {
-        settingsModal.close();
-    }
-});
 
 resultsModal.addEventListener('click', (e) => {
     if (e.target === resultsModal) {
@@ -27,14 +16,6 @@ function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function changeDifficulty() {
-    const form = document.querySelector('#select-difficulty-form');
-    const newDifficulty = Number(form.difficulty.value);
-
-    ComputerPlayer.setDifficulty(newDifficulty);
-    GameBoard.resetGame();
 }
 
 
@@ -215,10 +196,8 @@ const DisplayController = (() => {
 
 //module for cpu opponent logic
 const ComputerPlayer = (() => {
-    let difficulty = 0;
-    
     function makeMove() {
-        const move = difficulty === 0 ? getRandomMove() : getBestMove();
+        const move = getRandomMove();
         GameBoard.makeMove(move);
     }
 
@@ -235,16 +214,7 @@ const ComputerPlayer = (() => {
         return possibleMoves[getRandomInt(0, possibleMoves.length - 1)];
     }
 
-    function setDifficulty(newDifficulty) {
-        difficulty = newDifficulty;
-    }
-
-    function getBestMove() {
-
-    }
-
     return {
         makeMove,
-        setDifficulty,
     };
 })();

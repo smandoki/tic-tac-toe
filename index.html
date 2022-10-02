@@ -33,23 +33,8 @@
         <div class="cell" data-index="8"></div>
     </div>
 
-    <div class="controls">
-        <button class="restart-button" onclick="GameBoard.resetGame()"><i class="bi bi-arrow-repeat"></i>Restart</button>
-        <button class="settings-button" onclick="openSettings()"><i class="bi bi-gear-fill"></i>Settings</button>
-    </div>
-
-    <dialog id="settings-modal">
-        <form method="dialog" id="select-difficulty-form" onsubmit="changeDifficulty()">
-            <label for="difficulty">Select difficulty</label>
-            <select name="difficulty" id="difficulty">
-                <option value="0">Easy</option>
-                <option value="1">Unbeatable</option>
-            </select>
-
-            <button type="submit">Submit</button>
-        </form>
-    </dialog>
-
+    <button class="restart-button" onclick="GameBoard.resetGame()"><i class="bi bi-arrow-repeat"></i>Restart</button>
+    
     <dialog id="results-modal">
         <div class="results-container">
             <h2 id="results-message">You win!</h2>
