@@ -15,6 +15,12 @@ function resetGame() {
 
 }
 
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 
 //module for storing board state and game logic
 const GameBoard = (() => {
@@ -31,15 +37,34 @@ const GameBoard = (() => {
         DisplayController.changeTurn();
 
         currentPlayerTurn = !currentPlayerTurn;
+
+        if (gameOver()) { //checks for win/draw/loss
+            //handle game end
+        }
+
+        if (currentPlayerTurn) {
+            ComputerPlayer.makeMove();
+        }
+    }
+
+    function gameOver() {
+        return false;
     }
 
     function getCurrentPlayerTurn() {
         return currentPlayerTurn;
     }
 
+    function getGameBoard() {
+        //returning shallow copy so that board cannot 
+        //be modified from outside
+        return [...gameBoard];
+    }
+
     return {
         makeMove,
         getCurrentPlayerTurn,
+        getGameBoard,
     };
 })();
 
@@ -77,9 +102,23 @@ const ComputerPlayer = (() => {
 
     function makeMove() {
         const move = difficulty === 0 ? getRandomMove() : getBestMove();
+        GameBoard.makeMove(move);
     }
 
     function getRandomMove() {
+        const possibleMoves = [];
+        const gameBoard = GameBoard.getGameBoard();
 
+        for (let i = 0; i < gameBoard.length; i++) {
+            if (gameBoard[i] === '') {
+                possibleMoves.push(i);
+            }
+        }
+
+        return possibleMoves[getRandomInt(0, possibleMoves.length - 1)];
     }
+
+    return {
+        makeMove,
+    };
 })();

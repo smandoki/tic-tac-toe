@@ -48,7 +48,8 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 60px;
+    font-size: 100px;
+    color: #646464;
 }
 
 .cell:hover {
